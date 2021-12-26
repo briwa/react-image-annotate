@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
+import { fabric } from 'fabric';
 
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -12,6 +13,8 @@ import CustomIcon from './CustomIcon';
 import AccessibilitySvg from '../symbols/accessibility.svg';
 import FireSvg from '../symbols/fire.svg';
 import InfoSvg from '../symbols/info.svg';
+
+import { CanvasContext } from '../fabric';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -55,11 +58,24 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function AddIcons() {
+  const { canvas } = React.useContext(CanvasContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const addIconAndClose = (e) => {
+    fabric.loadSVGFromURL(e.currentTarget.firstElementChild.src, (icons) => {
+      const icon = icons[0];
+      icon.scaleToWidth(50);
+      canvas.add(icon).setActiveObject(icon).renderAll();
+    });
+
+    handleClose();
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -88,9 +104,9 @@ export default function AddIcons() {
           'aria-labelledby': 'sider-add-icons',
         }}
       >
-        <MenuItem onClick={handleClose}><CustomIcon src={AccessibilitySvg} />Accessibility</MenuItem>
-        <MenuItem onClick={handleClose}><CustomIcon src={FireSvg} />Fire</MenuItem>
-        <MenuItem onClick={handleClose}><CustomIcon src={InfoSvg} />Info</MenuItem>
+        <MenuItem onClick={addIconAndClose}><CustomIcon src={AccessibilitySvg} />Accessibility</MenuItem>
+        <MenuItem onClick={addIconAndClose}><CustomIcon src={FireSvg} />Fire</MenuItem>
+        <MenuItem onClick={addIconAndClose}><CustomIcon src={InfoSvg} />Info</MenuItem>
       </StyledMenu>
     </React.Fragment>
   );
