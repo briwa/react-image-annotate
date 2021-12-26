@@ -10,12 +10,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import PhotoIcon from '@mui/icons-material/Photo';
+import DownloadIcon from '@mui/icons-material/Download';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import TextField from '@mui/material/TextField';
 
 import AddIcons from './AddIcons';
 
-import { useActiveItemColor } from '../fabric';
+import { useActiveItemColor, useTriggerBaseImageUpload, useDownload } from '../fabric';
 
 const Drawer = styled(MuiDrawer)({
   '& .MuiDrawer-paper': {
@@ -31,24 +32,25 @@ const ColorField = styled(TextField)({
 })
 
 export const MainListItems = () => {
-  const triggerImageUpload = () => {
-    const imageInput = document.getElementById('image-input');
-    if (imageInput) {
-      imageInput.value = null;
-      imageInput.click();
-    }
-  };
+  const triggerBaseImageUpload = useTriggerBaseImageUpload();
+  const triggerDownload = useDownload();
 
   return (
-    <div>
-      <ListItem button onClick={triggerImageUpload}>
+    <React.Fragment>
+      <ListItem button onClick={triggerBaseImageUpload}>
         <ListItemIcon>
           <PhotoIcon />
         </ListItemIcon>
         <ListItemText primary="Set image" />
       </ListItem>
       <AddIcons />
-    </div>
+      <ListItem button onClick={triggerDownload}>
+        <ListItemIcon>
+          <DownloadIcon />
+        </ListItemIcon>
+        <ListItemText primary="Download" />
+      </ListItem>
+    </React.Fragment>
   );
 };
 
@@ -75,7 +77,7 @@ export const SecondaryListItems = () => {
   }, [activeItemColor, setActiveItemColor]);
 
   return !activeItemColor ? null : (
-    <div>
+    <React.Fragment>
       <ListSubheader inset>Properties</ListSubheader>
       <ListItem>
         <ListItemIcon>
@@ -83,7 +85,7 @@ export const SecondaryListItems = () => {
         </ListItemIcon>
         {colorField}
       </ListItem>
-    </div>
+    </React.Fragment>
   );
 };
 

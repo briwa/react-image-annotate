@@ -3,6 +3,16 @@ import { fabric } from 'fabric';
 
 import { CanvasContext } from './context';
 
+export const useTriggerBaseImageUpload = () => {
+  return () => {
+    const imageInput = document.getElementById('image-input');
+    if (imageInput) {
+      imageInput.value = null;
+      imageInput.click();
+    }
+  };
+};
+
 export const BaseImageInput = ({ content }) => {
   const { canvas } = React.useContext(CanvasContext);
 
