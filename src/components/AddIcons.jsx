@@ -5,9 +5,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AddBoxIcon from '@mui/icons-material/AddBox';
-
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+
+import CustomIcon from './CustomIcon';
+import AccessibilitySvg from '../symbols/accessibility.svg';
+import FireSvg from '../symbols/fire.svg';
+import InfoSvg from '../symbols/info.svg';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -84,9 +88,9 @@ export default function AddIcons() {
           'aria-labelledby': 'sider-add-icons',
         }}
       >
-        <MenuItem onClick={handleClose}>Icon 1</MenuItem>
-        <MenuItem onClick={handleClose}>Icon 2</MenuItem>
-        <MenuItem onClick={handleClose}>Icon 3</MenuItem>
+        <MenuItem onClick={handleClose}><CustomIcon src={AccessibilitySvg} />Accessibility</MenuItem>
+        <MenuItem onClick={handleClose}><CustomIcon src={FireSvg} />Fire</MenuItem>
+        <MenuItem onClick={handleClose}><CustomIcon src={InfoSvg} />Info</MenuItem>
       </StyledMenu>
     </React.Fragment>
   );
