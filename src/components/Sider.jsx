@@ -24,9 +24,18 @@ const Drawer = styled(MuiDrawer)({
   },
 });
 
-export const mainListItems = (
-  <div>
-    <ListItem button>
+export const MainListItems = () => {
+  const triggerImageUpload = () => {
+    const input = document.getElementById('image-input');
+    if (input) {
+      input.value = null;
+      input.click();
+    }
+  };
+
+  return (
+    <div>
+    <ListItem button onClick={triggerImageUpload}>
       <ListItemIcon>
         <PhotoIcon />
       </ListItemIcon>
@@ -34,7 +43,8 @@ export const mainListItems = (
     </ListItem>
     <AddIcons />
   </div>
-);
+  );
+};
 
 export const secondaryListItems = (
   <div>
@@ -77,7 +87,7 @@ export default function SiderListItems () {
     >
     </Toolbar>
     <Divider />
-    <List>{mainListItems}</List>
+    <List><MainListItems /></List>
     <Divider />
     <List>{secondaryListItems}</List>
   </Drawer>
