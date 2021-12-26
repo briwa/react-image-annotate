@@ -4,21 +4,23 @@ import { CanvasContext } from './context';
 export const useKeys = () => {
   const { canvas } = React.useContext(CanvasContext);
 
-  document.addEventListener('keyup', (e) => {
+  React.useEffect(() => {
     if (!canvas) return;
 
-    const activeObj = canvas.getActiveObject();
-    if (!activeObj) return;
-
-    switch (e.key) {
-      case 'Delete':
-      case 'Backspace': {
-        canvas.remove(activeObj);
-        break;
+    document.addEventListener('keyup', (e) => {
+      const activeObj = canvas.getActiveObject();
+      if (!activeObj) return;
+  
+      switch (e.key) {
+        case 'Delete':
+        case 'Backspace': {
+          canvas.remove(activeObj);
+          break;
+        }
+        default: {
+          break;
+        }
       }
-      default: {
-        break;
-      }
-    }
-  });
-}
+    });
+  }, [canvas]);
+};

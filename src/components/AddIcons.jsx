@@ -67,6 +67,13 @@ export default function AddIcons() {
   };
 
   const addIconAndClose = (e) => {
+    const imageInput = document.getElementById('image-input');
+    if (imageInput && !imageInput.value) {
+      handleClose();
+
+      return;
+    }
+
     fabric.loadSVGFromURL(e.currentTarget.firstElementChild.src, (icons) => {
       const icon = icons[0];
       icon.scaleToWidth(50);

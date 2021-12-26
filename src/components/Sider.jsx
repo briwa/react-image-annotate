@@ -15,6 +15,8 @@ import TextField from '@mui/material/TextField';
 
 import AddIcons from './AddIcons';
 
+import { useActiveItemColor } from '../fabric';
+
 const Drawer = styled(MuiDrawer)({
   '& .MuiDrawer-paper': {
     position: 'relative',
@@ -24,55 +26,66 @@ const Drawer = styled(MuiDrawer)({
   },
 });
 
+const ColorField = styled(TextField)({
+  width: '151px',
+})
+
 export const MainListItems = () => {
   const triggerImageUpload = () => {
-    const input = document.getElementById('image-input');
-    if (input) {
-      input.value = null;
-      input.click();
+    const imageInput = document.getElementById('image-input');
+    if (imageInput) {
+      imageInput.value = null;
+      imageInput.click();
     }
   };
 
   return (
     <div>
-    <ListItem button onClick={triggerImageUpload}>
-      <ListItemIcon>
-        <PhotoIcon />
-      </ListItemIcon>
-      <ListItemText primary="Set image" />
-    </ListItem>
-    <AddIcons />
-  </div>
+      <ListItem button onClick={triggerImageUpload}>
+        <ListItemIcon>
+          <PhotoIcon />
+        </ListItemIcon>
+        <ListItemText primary="Set image" />
+      </ListItem>
+      <AddIcons />
+    </div>
   );
 };
 
-export const secondaryListItems = (
-  <div>
-    <ListSubheader inset>Properties</ListSubheader>
-    <ListItem>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <TextField
-        id="selected-icon-name"
-        label="Name"
-        type="text"
-        variant="standard"
-      />
-    </ListItem>
-    <ListItem>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <TextField
+export const SecondaryListItems = () => {
+  const [activeItemColor, setActiveItemColor] = useActiveItemColor();
+
+  const colorField = React.useMemo(() => {
+    if (!activeItemColor) return null;
+
+    const setColorToActiveItem = (e) => {
+      setActiveItemColor(e.currentTarget.value);
+    };  
+
+    return (
+      <ColorField
         id="selected-icon-color"
         label="Color"
-        type="text"
+        type="color"
         variant="standard"
+        value={activeItemColor}
+        onChange={setColorToActiveItem}
       />
-    </ListItem>
-  </div>
-);
+    );
+  }, [activeItemColor, setActiveItemColor]);
+
+  return !activeItemColor ? null : (
+    <div>
+      <ListSubheader inset>Properties</ListSubheader>
+      <ListItem>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        {colorField}
+      </ListItem>
+    </div>
+  );
+};
 
 export default function SiderListItems () {
   return (
@@ -89,7 +102,7 @@ export default function SiderListItems () {
     <Divider />
     <List><MainListItems /></List>
     <Divider />
-    <List>{secondaryListItems}</List>
+    <List><SecondaryListItems /></List>
   </Drawer>
   );
 }
