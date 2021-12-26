@@ -6,7 +6,7 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-import { useInitializeCanvas, BaseImageInput } from './fabric';
+import { BaseImageInput, useInitializeCanvas, useKeys, useContentSize } from './fabric';
 import Sider from './components/Sider';
 
 const CanvasContainer = styled(Box)({
@@ -25,16 +25,8 @@ const mdTheme = createTheme();
 
 function AppContent() {
   useInitializeCanvas();
-
-  const [canvasContRect, setCanvasContRect] = React.useState(null);
-
-  React.useLayoutEffect(() => {
-    const mainContent = document.getElementById('main-content');
-    if (mainContent) {
-      setCanvasContRect(mainContent.getBoundingClientRect());
-    }
-
-  }, [setCanvasContRect]);
+  useKeys();
+  const content = useContentSize();
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -74,7 +66,7 @@ function AppContent() {
           </CanvasContainer>
         </Box>
       </Box>
-      <BaseImageInput canvasContRect={canvasContRect} />
+      <BaseImageInput content={content} />
     </ThemeProvider>
   );
 }

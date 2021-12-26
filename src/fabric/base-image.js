@@ -3,7 +3,7 @@ import { fabric } from 'fabric';
 
 import { CanvasContext } from './context';
 
-export const BaseImageInput = ({ canvasContRect }) => {
+export const BaseImageInput = ({ content }) => {
   const { canvas } = React.useContext(CanvasContext);
 
   const setBaseImageToCanvas = (e) => {
@@ -19,14 +19,14 @@ export const BaseImageInput = ({ canvasContRect }) => {
 
         // Fit to either width or height of the canvas depending on the image ratio.
         if (img.width > img.height) {
-          img.scaleToWidth(canvasContRect.width);
+          img.scaleToWidth(content.width);
         } else {
-          img.scaleToHeight(canvasContRect.height);
+          img.scaleToHeight(content.height);
         }
-        if (img.scaleY * img.height > canvasContRect.height) {
-          img.scaleToHeight(canvasContRect.height);
-        } else if (img.scaleX * img.width > canvasContRect.width) {
-          img.scaleToWidth(canvasContRect.width);
+        if (img.scaleY * img.height > content.height) {
+          img.scaleToHeight(content.height);
+        } else if (img.scaleX * img.width > content.width) {
+          img.scaleToWidth(content.width);
         }
 
         canvas.add(img).renderAll();
