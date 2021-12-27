@@ -80,8 +80,7 @@ export default function AddIcons() {
     dispatch(
       addIcon(createIcon({
         url: e.currentTarget.firstElementChild.src,
-        width: 50,
-        height: 50,
+        title: e.currentTarget.firstElementChild.alt,
       })),
     );
 
@@ -116,9 +115,15 @@ export default function AddIcons() {
           'aria-labelledby': 'sider-add-icons',
         }}
       >
-        <MenuItem onClick={addIconAndClose}><CustomIcon src={AccessibilitySvg} />Accessibility</MenuItem>
-        <MenuItem onClick={addIconAndClose}><CustomIcon src={FireSvg} />Fire</MenuItem>
-        <MenuItem onClick={addIconAndClose}><CustomIcon src={InfoSvg} />Info</MenuItem>
+        <MenuItem onClick={addIconAndClose}>
+          <CustomIcon src={AccessibilitySvg} alt="Accessibility" />Accessibility
+        </MenuItem>
+        <MenuItem onClick={addIconAndClose}>
+          <CustomIcon src={FireSvg} alt="Fire" />Fire
+        </MenuItem>
+        <MenuItem onClick={addIconAndClose}>
+          <CustomIcon src={InfoSvg} alt="Info" />Info
+        </MenuItem>
       </StyledMenu>
     </>
   );

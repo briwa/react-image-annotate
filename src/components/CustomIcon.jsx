@@ -3,14 +3,14 @@ import { styled } from '@mui/material/styles';
 
 const StyledSvgIcon = styled((props) => (
   <img
-    alt="some icon"
+    alt={props.alt}
     {...props}
   />
 ))({ marginRight: '1rem' });
 
-export default function CustomIcon({ src }) {
+export default function CustomIcon({ src, alt }) {
 
   return (
-    <StyledSvgIcon src={src} />
+    <StyledSvgIcon src={src} alt={alt} />
   );
 }

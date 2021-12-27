@@ -1,7 +1,7 @@
 import { useContext, useEffect, useCallback } from 'react';
 import { CanvasContext } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveItemId, setIconProps } from '../store/slices/canvas';
+import { setActiveItemId, setIconProp } from '../store/slices/canvas';
 
 export const useActiveItemColor = () => {
   const { canvas } = useContext(CanvasContext);
@@ -30,12 +30,18 @@ export const useActiveItemColor = () => {
     canvas.on('selection:created', updateActiveItemId());
     canvas.on('selection:updated', updateActiveItemId());
     canvas.on('selection:cleared', updateActiveItemId(null));
+
+    return () => {
+      canvas.off('selection:created');
+      canvas.off('selection:updated');
+      canvas.off('selection:cleared');
+    };
   }, [dispatch, canvas]);
 
   const setActiveItemColor = useCallback((color) => {
-    dispatch(setIconProps({
+    dispatch(setIconProp({
       id: activeItemId,
-      prop: 'color',
+      key: 'color',
       value: color,
     }));
   }, [dispatch, activeItemId]);

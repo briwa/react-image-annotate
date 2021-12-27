@@ -20,10 +20,18 @@ export const canvasSlice = createSlice({
       state.icons.allIds = state.icons.allIds.filter((id) => id !== action.payload.id);
       delete state.icons.byId[action.payload.id]
     },
+    setIconProp: (state, action) => {
+      const icon = state.icons.byId[action.payload.id];
+      if (icon) {
+        icon[action.payload.key] = action.payload.value;
+      }
+    },
     setIconProps: (state, action) => {
       const icon = state.icons.byId[action.payload.id];
       if (icon) {
-        icon[action.payload.prop] = action.payload.value;
+        for (const key in action.payload.props) {
+          icon[key] = action.payload.props[key];
+        }
       }
     },
     setBaseImage: (state, action) => {
@@ -49,6 +57,7 @@ export const canvasSlice = createSlice({
 export const {
   addIcon,
   removeIcon,
+  setIconProp,
   setIconProps,
   setBaseImage,
   unsetBaseImage,

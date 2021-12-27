@@ -16,6 +16,7 @@ export const createBaseImage = (props) => {
 export const createIcon = (props) => {
   return {
     id: uuidv4(),
+    title: '',
     url: null,
     createdAt: (new Date()).toISOString(),
     x: 0,
