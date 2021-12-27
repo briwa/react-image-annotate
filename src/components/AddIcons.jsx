@@ -15,7 +15,7 @@ import FireSvg from '../symbols/fire.svg';
 import InfoSvg from '../symbols/info.svg';
 
 import { addIcon } from '../store/slices/canvas';
-import { createIcon } from '../helpers/base-items';
+import { createIcon } from '../helpers/items';
 
 export default function AddIcons() {
   const baseImage = useSelector((state) => state.canvas.baseImage);

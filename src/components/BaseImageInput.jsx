@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { setBaseImage } from '../store/slices/canvas';
-import { createBaseImage } from '../helpers/base-items';
+import { createBaseImage } from '../helpers/items';
 
 export default function BaseImageInput () {
   const dispatch = useDispatch();
