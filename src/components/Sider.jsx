@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
@@ -14,10 +14,17 @@ import PhotoIcon from '@mui/icons-material/Photo';
 import DownloadIcon from '@mui/icons-material/Download';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 
 import AddIcons from './AddIcons';
+import StyledMenu from './StyledMenu';
 
-import { useActiveItemColor, useTriggerBaseImageUpload, useDownload } from '../hooks';
+import {
+  useActiveItemColor,
+  useTriggerBaseImageUpload,
+  useDownloadImage,
+  useDownloadCSV,
+} from '../hooks';
 
 const Drawer = styled(MuiDrawer)({
   '& .MuiDrawer-paper': {
@@ -34,7 +41,29 @@ const ColorField = styled(TextField)({
 
 export const MainListItems = () => {
   const triggerBaseImageUpload = useTriggerBaseImageUpload();
-  const triggerDownload = useDownload();
+  const downloadImage = useDownloadImage();
+  const downloadCSV = useDownloadCSV();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const triggerDownloadImageAndClose = () => {
+    downloadImage();
+    handleClose();
+  };
+
+  const triggerDownloadCSVAndClose = () => {
+    downloadCSV();
+    handleClose();
+  };
 
   return (
     <>
@@ -45,12 +74,35 @@ export const MainListItems = () => {
         <ListItemText primary="Set image" />
       </ListItem>
       <AddIcons />
-      <ListItem button onClick={triggerDownload}>
+      <ListItem
+        button
+        id="sider-download"
+        aria-controls="sider-download-options"
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
         <ListItemIcon>
           <DownloadIcon />
         </ListItemIcon>
         <ListItemText primary="Download" />
       </ListItem>
+      <StyledMenu
+        id="sider-download-options"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'sider-download',
+        }}
+      >
+        <MenuItem onClick={triggerDownloadImageAndClose}>
+          Image
+        </MenuItem>
+        <MenuItem onClick={triggerDownloadCSVAndClose}>
+          CSV
+        </MenuItem>
+      </StyledMenu>
     </>
   );
 };
