@@ -1,41 +1,44 @@
-import { useContext, useState, useEffect, useCallback } from 'react';
-import Color from 'color';
+import { useContext, useEffect, useCallback } from 'react';
 import { CanvasContext } from '../hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveItemId, setIconProps } from '../store/slices/canvas';
 
 export const useActiveItemColor = () => {
   const { canvas } = useContext(CanvasContext);
-  const [activeItemColor, setActiveItemColor] = useState(null);
+  const dispatch = useDispatch();
+  const activeItemId = useSelector((state) => state.canvas.activeItemId);
+  const activeItemColor = useSelector((state) => {
+    if (!activeItemId) return;
+
+    return state.canvas.icons.byId[activeItemId]?.color;
+  });
 
   useEffect(() => {
     if (!canvas) return;
 
-    const updateSelectedColor = (c) => () => {
-      if (c !== undefined) {
-        setActiveItemColor(c);  
+    const updateActiveItemId = (id) => () => {
+      if (id !== undefined) {
+        dispatch(setActiveItemId({ id }))
       } else {
         const object = canvas.getActiveObject();
         if (object) {
-          const color = new Color(canvas.getActiveObject().fill);
-          setActiveItemColor(color.hex());  
-        }  
+          dispatch(setActiveItemId({ id: object.id }));
+        }
       }
     }
 
-    canvas.on('selection:created', updateSelectedColor());
-    canvas.on('selection:updated', updateSelectedColor());
-    canvas.on('selection:cleared', updateSelectedColor(null));
-  }, [canvas]);
+    canvas.on('selection:created', updateActiveItemId());
+    canvas.on('selection:updated', updateActiveItemId());
+    canvas.on('selection:cleared', updateActiveItemId(null));
+  }, [dispatch, canvas]);
 
-  const setColorAndUpdateActiveItem = useCallback((color) => {
-    if (!canvas) return;
+  const setActiveItemColor = useCallback((color) => {
+    dispatch(setIconProps({
+      id: activeItemId,
+      prop: 'color',
+      value: color,
+    }));
+  }, [dispatch, activeItemId]);
 
-    const object = canvas.getActiveObject();
-    if (!object) return;
-
-    setActiveItemColor(color);
-    object.set('fill', color);
-    canvas.renderAll();
-  }, [canvas, setActiveItemColor]);
-
-  return [activeItemColor, setColorAndUpdateActiveItem];
+  return [activeItemColor, setActiveItemColor];
 };
