@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useMemo } from 'react';
 
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
@@ -37,7 +37,7 @@ export const MainListItems = () => {
   const triggerDownload = useDownload();
 
   return (
-    <React.Fragment>
+    <>
       <ListItem button onClick={triggerBaseImageUpload}>
         <ListItemIcon>
           <PhotoIcon />
@@ -51,14 +51,14 @@ export const MainListItems = () => {
         </ListItemIcon>
         <ListItemText primary="Download" />
       </ListItem>
-    </React.Fragment>
+    </>
   );
 };
 
 export const SecondaryListItems = () => {
   const [activeItemColor, setActiveItemColor] = useActiveItemColor();
 
-  const colorField = React.useMemo(() => {
+  const colorField = useMemo(() => {
     if (!activeItemColor) return null;
 
     const setColorToActiveItem = (e) => {
@@ -78,7 +78,7 @@ export const SecondaryListItems = () => {
   }, [activeItemColor, setActiveItemColor]);
 
   return !activeItemColor ? null : (
-    <React.Fragment>
+    <>
       <ListSubheader inset>Properties</ListSubheader>
       <ListItem>
         <ListItemIcon>
@@ -86,7 +86,7 @@ export const SecondaryListItems = () => {
         </ListItemIcon>
         {colorField}
       </ListItem>
-    </React.Fragment>
+    </>
   );
 };
 

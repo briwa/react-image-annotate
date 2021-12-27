@@ -1,12 +1,12 @@
-import * as React from 'react';
+import { useContext, useState, useEffect, useCallback } from 'react';
 import Color from 'color';
 import { CanvasContext } from '../hooks';
 
 export const useActiveItemColor = () => {
-  const { canvas } = React.useContext(CanvasContext);
-  const [activeItemColor, setActiveItemColor] = React.useState(null);
+  const { canvas } = useContext(CanvasContext);
+  const [activeItemColor, setActiveItemColor] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!canvas) return;
 
     const updateSelectedColor = (c) => () => {
@@ -26,7 +26,7 @@ export const useActiveItemColor = () => {
     canvas.on('selection:cleared', updateSelectedColor(null));
   }, [canvas]);
 
-  const setColorAndUpdateActiveItem = React.useCallback((color) => {
+  const setColorAndUpdateActiveItem = useCallback((color) => {
     if (!canvas) return;
 
     const object = canvas.getActiveObject();

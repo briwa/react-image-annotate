@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useContext, useState, useCallback } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import { fabric } from 'fabric';
 import { useSelector } from 'react-redux';
@@ -59,9 +59,9 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function AddIcons() {
-  const { canvas } = React.useContext(CanvasContext);
+  const { canvas } = useContext(CanvasContext);
   const baseImage = useSelector((state) => state.canvas.baseImage);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const open = Boolean(anchorEl);
 
@@ -69,7 +69,7 @@ export default function AddIcons() {
     setAnchorEl(event.currentTarget);
   };
 
-  const addIconAndClose = React.useCallback((e) => {
+  const addIconAndClose = useCallback((e) => {
     if (!baseImage) {
       handleClose();
 
@@ -90,7 +90,7 @@ export default function AddIcons() {
   };
 
   return (
-    <React.Fragment>
+    <>
       <ListItem
         button
         id="sider-add-icons"
@@ -117,6 +117,6 @@ export default function AddIcons() {
         <MenuItem onClick={addIconAndClose}><CustomIcon src={FireSvg} />Fire</MenuItem>
         <MenuItem onClick={addIconAndClose}><CustomIcon src={InfoSvg} />Info</MenuItem>
       </StyledMenu>
-    </React.Fragment>
+    </>
   );
 }

@@ -1,10 +1,10 @@
-import * as React from 'react';
+import { createContext, useState, useContext, useLayoutEffect } from 'react';
 import { fabric } from 'fabric';
 
-export const CanvasContext = React.createContext({ canvas: null, setCanvas: null });
+export const CanvasContext = createContext({ canvas: null, setCanvas: null });
 
 export const WithCanvasContext = (props) => {
-  const [canvas, setCanvas] = React.useState(null);
+  const [canvas, setCanvas] = useState(null);
 
   return (
     <CanvasContext.Provider value={{ canvas, setCanvas }}>
@@ -14,9 +14,9 @@ export const WithCanvasContext = (props) => {
 }
 
 export const useInitializeCanvas = () => {
-  const { setCanvas } = React.useContext(CanvasContext);
+  const { setCanvas } = useContext(CanvasContext);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const canvas = new fabric.Canvas('canvas');
     setCanvas(canvas);
   }, [setCanvas]);

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useContext, useEffect } from 'react';
 import { fabric } from 'fabric';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -16,12 +16,12 @@ export const useTriggerBaseImageUpload = () => {
 };
 
 export const useSetBaseImage = () => {
-  const { canvas } = React.useContext(CanvasContext);
+  const { canvas } = useContext(CanvasContext);
   const dispatch = useDispatch();
   const canvasSize = useSelector((state) => state.canvas.size);
   const baseImage = useSelector((state) => state.canvas.baseImage);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!baseImage?.url || !canvas) return;
 
     const image = new Image();

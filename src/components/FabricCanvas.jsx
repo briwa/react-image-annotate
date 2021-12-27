@@ -1,4 +1,4 @@
-import { useSetBaseImage, useSetCanvasToBaseImage } from "../hooks";
+import { useSetBaseImage, useSetCanvasToBaseImage } from '../hooks';
 
 export default function FabricCanvas () {
   useSetBaseImage();

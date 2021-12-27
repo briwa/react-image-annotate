@@ -1,4 +1,4 @@
-import React from 'react';
+import { StrictMode as ReactStrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 
@@ -8,12 +8,12 @@ import store from './store'
 import { WithCanvasContext } from './hooks';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <ReactStrictMode>
     <Provider store={store}>
       <WithCanvasContext>
         <App />
       </WithCanvasContext>
     </Provider>
-  </React.StrictMode>,
+  </ReactStrictMode>,
   document.getElementById('root')
 );

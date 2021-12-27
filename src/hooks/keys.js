@@ -1,10 +1,10 @@
-import * as React from 'react';
+import { useContext, useEffect } from 'react';
 import { CanvasContext } from '../hooks';
 
 export const useKeys = () => {
-  const { canvas } = React.useContext(CanvasContext);
+  const { canvas } = useContext(CanvasContext);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!canvas) return;
 
     document.addEventListener('keyup', (e) => {

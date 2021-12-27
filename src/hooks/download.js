@@ -1,12 +1,12 @@
-import * as React from 'react';
+import { useContext, useCallback } from 'react';
 import { CanvasContext } from '../hooks';
 import { useSelector } from 'react-redux';
 
 export const useDownload = () => {
-  const { canvas } = React.useContext(CanvasContext);
+  const { canvas } = useContext(CanvasContext);
   const baseImage = useSelector((state) => state.canvas.baseImage);
 
-  return React.useCallback(() => {
+  return useCallback(() => {
     if (!canvas || !baseImage) return;
 
     const dataUrl = canvas.toDataURL({
