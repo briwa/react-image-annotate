@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { setBaseImage } from '../store/slices/canvas';
 import { createBaseImage } from '../helpers/base-items';
 
-
 export default function BaseImageInput () {
   const dispatch = useDispatch();
 
@@ -12,6 +11,7 @@ export default function BaseImageInput () {
     const reader = new FileReader();
     reader.onload = function(e) {
       const img = document.createElement('img');
+
       // Make sure that the image is always outside
       // of user's viewport, since it's just temporary.
       img.style.position = 'absolute';

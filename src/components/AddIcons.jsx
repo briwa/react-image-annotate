@@ -1,6 +1,6 @@
-import { useContext, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { styled, alpha } from '@mui/material/styles';
-import { fabric } from 'fabric';
 import { useSelector } from 'react-redux';
 
 import ListItem from '@mui/material/ListItem';
@@ -15,7 +15,8 @@ import AccessibilitySvg from '../symbols/accessibility.svg';
 import FireSvg from '../symbols/fire.svg';
 import InfoSvg from '../symbols/info.svg';
 
-import { CanvasContext } from '../hooks';
+import { addIcon } from '../store/slices/canvas';
+import { createIcon } from '../helpers/base-items';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -59,9 +60,9 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function AddIcons() {
-  const { canvas } = useContext(CanvasContext);
   const baseImage = useSelector((state) => state.canvas.baseImage);
   const [anchorEl, setAnchorEl] = useState(null);
+  const dispatch = useDispatch();
 
   const open = Boolean(anchorEl);
 
@@ -76,14 +77,16 @@ export default function AddIcons() {
       return;
     }
 
-    fabric.loadSVGFromURL(e.currentTarget.firstElementChild.src, (icons) => {
-      const icon = icons[0];
-      icon.scaleToWidth(50);
-      canvas.add(icon).setActiveObject(icon).renderAll();
-    });
+    dispatch(
+      addIcon(createIcon({
+        url: e.currentTarget.firstElementChild.src,
+        width: 50,
+        height: 50,
+      })),
+    );
 
     handleClose();
-  }, [canvas, baseImage]);
+  }, [dispatch, baseImage]);
 
   const handleClose = () => {
     setAnchorEl(null);

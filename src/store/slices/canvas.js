@@ -42,7 +42,6 @@ export const canvasSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const {
   addIcon,
   removeIcon,
