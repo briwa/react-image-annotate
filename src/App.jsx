@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -6,7 +7,10 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-import { BaseImageInput, useInitializeCanvas, useKeys, useContentSize } from './fabric';
+import { useInitializeCanvas, useKeys, useContentSize } from './hooks';
+
+import BaseImageInput from './components/BaseImageInput';
+import FabricCanvas from './components/FabricCanvas';
 import Sider from './components/Sider';
 
 const CanvasContainer = styled(Box)({
@@ -26,7 +30,9 @@ const mdTheme = createTheme();
 function AppContent() {
   useInitializeCanvas();
   useKeys();
-  const content = useContentSize();
+  useContentSize();
+
+  const baseImage = useSelector((state) => state.canvas.baseImage);
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -56,13 +62,14 @@ function AppContent() {
             mt: 8,
           }}
         >
-          <Typography id="no-image-set">No image set. Please set an image before proceeding.</Typography>
+          { !baseImage && <Typography id="no-image-set">No image set. Please set an image before proceeding.</Typography> }
           <CanvasContainer id="canvas-container">
             <canvas id="canvas"></canvas>
           </CanvasContainer>
         </Box>
       </Box>
-      <BaseImageInput content={content} />
+      <BaseImageInput />
+      <FabricCanvas />
     </ThemeProvider>
   );
 }

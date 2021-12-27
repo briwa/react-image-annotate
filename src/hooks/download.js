@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { CanvasContext } from './context';
+import { CanvasContext } from './canvas';
+import { useSelector } from 'react-redux';
 
 export const useDownload = () => {
   const { canvas } = React.useContext(CanvasContext);
+  const baseImage = useSelector((state) => state.canvas.baseImage);
 
   return React.useCallback(() => {
-    if (!canvas) return;
-
-    const imageInput = document.getElementById('image-input');
-    if (imageInput && !imageInput.value) return;
+    if (!canvas || !baseImage) return;
 
     const dataUrl = canvas.toDataURL({
       format: 'png',
@@ -22,5 +21,5 @@ export const useDownload = () => {
     link.remove();
 
     return dataUrl;
-  }, [canvas]);
+  }, [canvas, baseImage]);
 };

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Color from 'color';
-import { CanvasContext } from './context';
+import { CanvasContext } from './canvas';
 
 export const useActiveItemColor = () => {
   const { canvas } = React.useContext(CanvasContext);

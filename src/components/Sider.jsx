@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -16,7 +17,7 @@ import TextField from '@mui/material/TextField';
 
 import AddIcons from './AddIcons';
 
-import { useActiveItemColor, useTriggerBaseImageUpload, useDownload } from '../fabric';
+import { useActiveItemColor, useTriggerBaseImageUpload, useDownload } from '../hooks';
 
 const Drawer = styled(MuiDrawer)({
   '& .MuiDrawer-paper': {

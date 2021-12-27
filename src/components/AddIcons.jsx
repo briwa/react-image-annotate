@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import { fabric } from 'fabric';
+import { useSelector } from 'react-redux';
 
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -14,7 +15,7 @@ import AccessibilitySvg from '../symbols/accessibility.svg';
 import FireSvg from '../symbols/fire.svg';
 import InfoSvg from '../symbols/info.svg';
 
-import { CanvasContext } from '../fabric';
+import { CanvasContext } from '../hooks';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -59,16 +60,17 @@ const StyledMenu = styled((props) => (
 
 export default function AddIcons() {
   const { canvas } = React.useContext(CanvasContext);
+  const baseImage = useSelector((state) => state.canvas.baseImage);
   const [anchorEl, setAnchorEl] = React.useState(null);
+
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const addIconAndClose = (e) => {
-    const imageInput = document.getElementById('image-input');
-    if (imageInput && !imageInput.value) {
+  const addIconAndClose = React.useCallback((e) => {
+    if (!baseImage) {
       handleClose();
 
       return;
@@ -81,7 +83,7 @@ export default function AddIcons() {
     });
 
     handleClose();
-  };
+  }, [canvas, baseImage]);
 
   const handleClose = () => {
     setAnchorEl(null);
