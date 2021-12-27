@@ -4,9 +4,11 @@ export const createBaseImage = (props) => {
   return {
     id: uuidv4(),
     createdAt: (new Date()).toISOString(),
-    w: 0,
-    h: 0,
-    src: null,
+    width: 0,
+    height: 0,
+    naturalWidth: 0,
+    naturalHeight: 0,
+    url: null,
     ...props,
   };
 };
@@ -14,11 +16,12 @@ export const createBaseImage = (props) => {
 export const createIcon = (props) => {
   return {
     id: uuidv4(),
+    url: null,
     createdAt: (new Date()).toISOString(),
     x: 0,
     y: 0,
-    w: 0,
-    h: 0,
+    width: 0,
+    height: 0,
     scaleX: 1,
     scaleY: 1,
     color: '#000000',

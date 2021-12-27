@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { fabric } from 'fabric';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { CanvasContext } from '../hooks';
+import { setBaseImageSize } from '../store/slices/canvas';
 
 export const useTriggerBaseImageUpload = () => {
   return () => {
@@ -16,16 +17,15 @@ export const useTriggerBaseImageUpload = () => {
 
 export const useSetBaseImage = () => {
   const { canvas } = React.useContext(CanvasContext);
+  const dispatch = useDispatch();
   const canvasSize = useSelector((state) => state.canvas.size);
   const baseImage = useSelector((state) => state.canvas.baseImage);
 
   React.useEffect(() => {
-    if (!baseImage?.src || !canvas) {
-      return;
-    }
+    if (!baseImage?.url || !canvas) return;
 
     const image = new Image();
-    image.src = baseImage.src;
+    image.src = baseImage.url;
 
     image.onload = function() {
       const img = new fabric.Image(image, { selectable: false, evented: false, hoverCursor: 'pointer' });
@@ -47,7 +47,7 @@ export const useSetBaseImage = () => {
       const imgWidth = img.width * img.scaleX;
       const imgHeight = img.height * img.scaleY;
 
-      canvas.setDimensions({ width: imgWidth, height: imgHeight });
+      dispatch(setBaseImageSize({ width: imgWidth, height: imgHeight }));
     }
-  }, [canvas, baseImage?.src, canvasSize]);
+  }, [canvas, baseImage?.url, dispatch, canvasSize]);
 };

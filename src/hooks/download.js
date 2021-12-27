@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CanvasContext } from './canvas';
+import { CanvasContext } from '../hooks';
 import { useSelector } from 'react-redux';
 
 export const useDownload = () => {

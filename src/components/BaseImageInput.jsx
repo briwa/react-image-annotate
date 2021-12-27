@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { setBaseImage } from '../store/slices/canvas';
+import { createBaseImage } from '../helpers/base-items';
+
 
 export default function BaseImageInput () {
   const dispatch = useDispatch();
@@ -21,11 +23,11 @@ export default function BaseImageInput () {
       img.onload = function() {
         const rect = img.getBoundingClientRect()
         dispatch(
-          setBaseImage({
-            src: e.target.result,
+          setBaseImage(createBaseImage({
+            url: e.target.result,
             naturalWidth: rect.width,
             naturalHeight: rect.height,
-          }),
+          })),
         );
         document.body.removeChild(img);
       }

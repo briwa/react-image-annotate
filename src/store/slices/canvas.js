@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { createBaseImage } from '../../helpers/base-items';
-
 export const canvasSlice = createSlice({
   name: 'canvas',
   initialState: {
@@ -28,10 +26,11 @@ export const canvasSlice = createSlice({
       }
     },
     setBaseImage: (state, action) => {
-      const baseImage = createBaseImage();
-      baseImage.src = action.payload.src;
-
-      state.baseImage = baseImage;
+      state.baseImage = action.payload;
+    },
+    setBaseImageSize: (state, action) => {
+      state.baseImage.width = action.payload.width;
+      state.baseImage.height = action.payload.height;
     },
     unsetBaseImage: (state) => {
       state.baseImage = null;
@@ -51,6 +50,7 @@ export const {
   setBaseImage,
   unsetBaseImage,
   setSize,
+  setBaseImageSize,
 } = canvasSlice.actions;
 
 export default canvasSlice.reducer;
