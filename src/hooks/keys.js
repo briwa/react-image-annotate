@@ -1,8 +1,11 @@
 import { useContext, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { CanvasContext } from '../hooks';
+import { removeIcon } from '../store/slices/canvas';
 
 export const useKeys = () => {
   const { canvas } = useContext(CanvasContext);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!canvas) return;
@@ -14,7 +17,7 @@ export const useKeys = () => {
       switch (e.key) {
         case 'Delete':
         case 'Backspace': {
-          canvas.remove(activeObj);
+          dispatch(removeIcon({ id: activeObj.id }));
           break;
         }
         default: {
@@ -22,5 +25,5 @@ export const useKeys = () => {
         }
       }
     });
-  }, [canvas]);
+  }, [dispatch, canvas]);
 };

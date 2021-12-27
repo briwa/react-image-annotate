@@ -3,16 +3,6 @@ import { fabric } from 'fabric';
 
 import { CanvasContext } from '../hooks';
 
-export const useTriggerBaseImageUpload = () => {
-  return () => {
-    const imageInput = document.getElementById('image-input');
-    if (imageInput) {
-      imageInput.value = null;
-      imageInput.click();
-    }
-  };
-};
-
 export const useCreateIcon = (icon) => {
   const { canvas } = useContext(CanvasContext);
   const { url, width, id } = icon;
@@ -34,7 +24,7 @@ export const useCreateIcon = (icon) => {
   }, [canvas, url, width, id]);
 };
 
-export const useUpdateIconColor = (icon) => {
+export const useSetIconColorOnCanvas = (icon) => {
   const { canvas } = useContext(CanvasContext);
   const { id, color } = icon;
 
