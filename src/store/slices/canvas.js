@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const canvasSlice = createSlice({
   name: 'canvas',
   initialState: {
-    size: { w: 0, h: 0 },
+    size: { width: 0, height: 0, isSiderOpened: true },
     baseImage: null,
     icons: {
       allIds: [],
@@ -45,11 +45,14 @@ export const canvasSlice = createSlice({
       state.baseImage = null;
     },
     setSize: (state, action) => {
-      state.size.w = action.payload.w;
-      state.size.h = action.payload.h;
+      state.size.width = action.payload.width;
+      state.size.height = action.payload.height;
     },
     setActiveItemId: (state, action) => {
       state.activeItemId = action.payload.id;
+    },
+    toggleSider: (state, action) => {
+      state.size.isSiderOpened = action.payload.toggle;
     },
   },
 });
@@ -64,6 +67,7 @@ export const {
   setSize,
   setBaseImageSize,
   setActiveItemId,
+  toggleSider,
 } = canvasSlice.actions;
 
 export default canvasSlice.reducer;

@@ -29,17 +29,19 @@ export const useSetBaseImage = () => {
 
     image.onload = function() {
       const img = new fabric.Image(image, { selectable: false, evented: false, hoverCursor: 'pointer' });
+      const canvasWidth = canvasSize.width;
+      const canvasHeight = canvasSize.height;
 
       // Fit to either width or height of the canvas depending on the image ratio.
       if (img.width > img.height) {
-        img.scaleToWidth(canvasSize.w);
+        img.scaleToWidth(canvasWidth);
       } else {
-        img.scaleToHeight(canvasSize.h);
+        img.scaleToHeight(canvasHeight);
       }
-      if (img.scaleY * img.height > canvasSize.h) {
-        img.scaleToHeight(canvasSize.h);
-      } else if (img.scaleX * img.width > canvasSize.w) {
-        img.scaleToWidth(canvasSize.w);
+      if (img.scaleY * img.height > canvasHeight) {
+        img.scaleToHeight(canvasHeight);
+      } else if (img.scaleX * img.width > canvasWidth) {
+        img.scaleToWidth(canvasWidth);
       }
 
       canvas.add(img).renderAll();

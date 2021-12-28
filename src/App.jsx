@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
 
 import { DRAWER_WIDTH } from './constants';
-import { useInitializeCanvas, useKeys, useContentSize } from './hooks';
+import { useInitializeCanvas, useKeys, useContentSize, useToggleSider } from './hooks';
 
 import BaseImageInput from './components/BaseImageInput';
 import FabricCanvas from './components/FabricCanvas';
@@ -46,31 +45,27 @@ const AppBar = styled(MuiAppBar, {
 const mdTheme = createTheme();
 
 function AppContent() {
-  const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+  const baseImage = useSelector((state) => state.canvas.baseImage);
+  const [isSiderOpened, triggerToggleSider] = useToggleSider();
 
   useInitializeCanvas();
   useKeys();
   useContentSize();
 
-  const baseImage = useSelector((state) => state.canvas.baseImage);
-
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
+        <AppBar position="absolute" open={isSiderOpened}>
           <Toolbar sx={{ pr: '24px' }} >
             <IconButton
               edge="start"
               color="inherit"
               aria-label="open drawer"
-              onClick={toggleDrawer}
+              onClick={triggerToggleSider}
               sx={{
                 marginRight: '36px',
-                ...(open && { display: 'none' }),
+                ...(isSiderOpened && { display: 'none' }),
               }}
             >
               <MenuIcon />
@@ -86,7 +81,7 @@ function AppContent() {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Sider open={open} toggleDrawer={toggleDrawer} />
+        <Sider />
         <Box
           id="main-content" 
           component="main"

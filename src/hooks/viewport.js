@@ -1,23 +1,25 @@
-import { useState, useContext, useLayoutEffect } from 'react';
+import { useCallback, useContext, useLayoutEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { setSize } from '../store/slices/canvas';
+import { toggleSider, setSize } from '../store/slices/canvas';
 
 import { CanvasContext } from '../hooks';
 
-export const useContentSize = () => {
-  const [canvasContRect, setCanvasContRect] = useState(null);
+const useDispatchContentSize = () => {
   const dispatch = useDispatch();
 
-  useLayoutEffect(() => {
+  return () => {
     const mainContent = document.getElementById('main-content');
     if (mainContent) {
       const rect = mainContent.getBoundingClientRect();
-      dispatch(setSize({ w: rect.width, h: rect.height }));
+      dispatch(setSize({ width: rect.width, height: rect.height }));
     }
+  };
+}
 
-  }, [setCanvasContRect, dispatch]);
+export const useContentSize = () => {
+  const contentSizeCallback = useDispatchContentSize();
 
-  return canvasContRect;
+  useLayoutEffect(contentSizeCallback, [contentSizeCallback]);
 }
 
 export const useSetCanvasToBaseImage = () => {
@@ -31,3 +33,16 @@ export const useSetCanvasToBaseImage = () => {
     canvas.setDimensions({ width: baseImageWidth, height: baseImageHeight });
   }, [canvas, baseImageWidth, baseImageHeight]);
 };
+
+export const useToggleSider = () => {
+  const dispatch = useDispatch();
+  const contentSizeCallback = useDispatchContentSize();
+
+  const isSiderOpened = useSelector((state) => state.canvas.size.isSiderOpened);
+  const triggerToggleSider = useCallback(() => {
+    dispatch(toggleSider({ toggle: !isSiderOpened }));
+    contentSizeCallback();
+  }, [dispatch, isSiderOpened, contentSizeCallback]);
+
+  return [isSiderOpened, triggerToggleSider];
+}

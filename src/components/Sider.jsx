@@ -12,6 +12,7 @@ import SiderDownloads from './SiderDownloads';
 import SiderProperties from './SiderProperties';
 
 import { DRAWER_WIDTH } from '../constants';
+import { useToggleSider } from '../hooks';
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -39,9 +40,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const Sider = ({ open, toggleDrawer }) => {
+const Sider = () => {
+  const [isSiderOpened, triggerToggleSider] = useToggleSider();
+
   return (
-    <Drawer variant="permanent" open={open}>
+    <Drawer variant="permanent" open={isSiderOpened}>
     <Toolbar
       sx={{
         display: 'flex',
@@ -50,7 +53,7 @@ const Sider = ({ open, toggleDrawer }) => {
         px: [1],
       }}
     >
-      <IconButton onClick={toggleDrawer}>
+      <IconButton onClick={triggerToggleSider}>
         <ChevronLeftIcon />
       </IconButton>
     </Toolbar>
