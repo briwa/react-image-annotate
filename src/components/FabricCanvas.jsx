@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import FabricIcon from './FabricIcon';
 
-export default function FabricCanvas () {
+const FabricCanvas = () => {
   useSetBaseImage();
   useSetCanvasToBaseImage();
 
@@ -21,3 +21,5 @@ export default function FabricCanvas () {
     </>
   );
 };
+
+export default FabricCanvas;

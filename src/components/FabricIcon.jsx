@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import { useCreateIcon, useSetIconColorOnCanvas } from '../hooks/icon';
+import { useCreateIcon, useSetIconColorOnCanvas } from '../hooks';
 
-export default function FabricIcon ({ id }) {
+const FabricIcon = ({ id }) => {
   const icon = useSelector((state) => state.canvas.icons.byId[id]);
 
   useCreateIcon(icon);
@@ -9,3 +9,5 @@ export default function FabricIcon ({ id }) {
   
   return null;
 };
+
+export default FabricIcon;

@@ -8,9 +8,10 @@ const StyledSvgIcon = styled((props) => (
   />
 ))({ marginRight: '1rem' });
 
-export default function CustomIcon({ src, alt }) {
-
+const CustomIcon = ({ src, alt }) => {
   return (
     <StyledSvgIcon src={src} alt={alt} />
   );
-}
+};
+
+export default CustomIcon;

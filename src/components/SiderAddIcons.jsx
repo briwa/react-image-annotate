@@ -17,7 +17,7 @@ import InfoSvg from '../symbols/info.svg';
 import { addIcon } from '../store/slices/canvas';
 import { createIcon } from '../helpers/items';
 
-export default function AddIcons() {
+const SiderAddIcons = () => {
   const baseImage = useSelector((state) => state.canvas.baseImage);
   const dispatch = useDispatch();
 
@@ -85,4 +85,6 @@ export default function AddIcons() {
       </StyledMenu>
     </>
   );
-}
+};
+
+export default SiderAddIcons;

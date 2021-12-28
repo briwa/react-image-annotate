@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { setBaseImage } from '../store/slices/canvas';
 import { createBaseImage } from '../helpers/items';
 
-export default function BaseImageInput () {
+const BaseImageInput = () => {
   const dispatch = useDispatch();
 
   const setBaseImageToCanvas = (e) => {
@@ -45,3 +45,5 @@ export default function BaseImageInput () {
     />
   );
 };
+
+export default BaseImageInput;
