@@ -5,12 +5,16 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
 
+import { DRAWER_WIDTH } from './constants';
 import { useInitializeCanvas, useKeys, useContentSize } from './hooks';
 
 import BaseImageInput from './components/BaseImageInput';
 import FabricCanvas from './components/FabricCanvas';
+import WelcomeText from './components/WelcomeText';
 import Sider from './components/Sider';
 
 const CanvasContainer = styled(Box)({
@@ -21,13 +25,32 @@ const CanvasContainer = styled(Box)({
   alignItems: 'center',
 });
 
-const AppBar = styled(MuiAppBar)(({ theme }) => ({
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: DRAWER_WIDTH,
+    width: `calc(100% - ${DRAWER_WIDTH}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
 }));
 
 const mdTheme = createTheme();
 
 function AppContent() {
+  const [open, setOpen] = React.useState(true);
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
+
   useInitializeCanvas();
   useKeys();
   useContentSize();
@@ -38,8 +61,20 @@ function AppContent() {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="absolute">
+        <AppBar position="absolute" open={open}>
           <Toolbar sx={{ pr: '24px' }} >
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              sx={{
+                marginRight: '36px',
+                ...(open && { display: 'none' }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
             <Typography
               component="h1"
               variant="h6"
@@ -51,7 +86,7 @@ function AppContent() {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Sider />
+        <Sider open={open} toggleDrawer={toggleDrawer} />
         <Box
           id="main-content" 
           component="main"
@@ -62,7 +97,7 @@ function AppContent() {
             mt: 8,
           }}
         >
-          { !baseImage && <Typography id="no-image-set">No image set. Please set an image before proceeding.</Typography> }
+          { !baseImage && <WelcomeText /> }
           <CanvasContainer id="canvas-container">
             <canvas id="canvas"></canvas>
           </CanvasContainer>

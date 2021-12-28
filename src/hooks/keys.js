@@ -1,23 +1,19 @@
-import { useContext, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { CanvasContext } from '../hooks';
-import { removeIcon } from '../store/slices/canvas';
+import { useLayoutEffect } from 'react';
+import { useTriggerDeleteActiveItem } from '../hooks';
 
 export const useKeys = () => {
-  const { canvas } = useContext(CanvasContext);
-  const dispatch = useDispatch();
+  const triggerDeleteActiveItem = useTriggerDeleteActiveItem();
 
-  useEffect(() => {
-    if (!canvas) return;
-
+  useLayoutEffect(() => {
     document.addEventListener('keyup', (e) => {
-      const activeObj = canvas.getActiveObject();
-      if (!activeObj) return;
-  
+      // These shortcuts should only work
+      // when user is not currently typing into any input.
+      if (document.activeElement.tagName === 'INPUT') return;
+
       switch (e.key) {
         case 'Delete':
         case 'Backspace': {
-          dispatch(removeIcon({ id: activeObj.id }));
+          triggerDeleteActiveItem();
           break;
         }
         default: {
@@ -25,5 +21,5 @@ export const useKeys = () => {
         }
       }
     });
-  }, [dispatch, canvas]);
+  }, [triggerDeleteActiveItem]);
 };

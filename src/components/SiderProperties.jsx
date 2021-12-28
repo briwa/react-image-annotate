@@ -4,12 +4,13 @@ import { styled } from '@mui/material/styles';
 
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListSubheader from '@mui/material/ListSubheader';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
 
 import {
-  useActiveItemColor,
+  useActiveItemColor, useTriggerDeleteActiveItem,
 } from '../hooks';
 
 const ColorField = styled(TextField)({
@@ -18,6 +19,7 @@ const ColorField = styled(TextField)({
 
 const SiderProperties = () => {
   const [activeItemColor, setActiveItemColor] = useActiveItemColor();
+  const triggerDeleteActiveItem = useTriggerDeleteActiveItem();
 
   const colorField = useMemo(() => {
     if (!activeItemColor) return null;
@@ -40,12 +42,17 @@ const SiderProperties = () => {
 
   return !activeItemColor ? null : (
     <>
-      <ListSubheader inset>Properties</ListSubheader>
       <ListItem>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
-        {colorField}
+        Properties
+      </ListItem>
+      <ListItem>{colorField}</ListItem>
+      <ListItem sx={{ marginLeft: [-1] }}>
+        <IconButton onClick={triggerDeleteActiveItem}>
+          <DeleteIcon/>
+        </IconButton>
       </ListItem>
     </>
   );

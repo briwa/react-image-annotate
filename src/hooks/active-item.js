@@ -1,7 +1,7 @@
 import { useContext, useEffect, useCallback } from 'react';
 import { CanvasContext } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveItemId, setIconProp } from '../store/slices/canvas';
+import { removeIcon, setActiveItemId, setIconProp } from '../store/slices/canvas';
 
 export const useActiveItemColor = () => {
   const { canvas } = useContext(CanvasContext);
@@ -47,4 +47,18 @@ export const useActiveItemColor = () => {
   }, [dispatch, activeItemId]);
 
   return [activeItemColor, setActiveItemColor];
+};
+
+export const useTriggerDeleteActiveItem = () => {
+  const { canvas } = useContext(CanvasContext);
+  const dispatch = useDispatch();
+
+  return useCallback(() => {
+    if (!canvas) return;
+
+    const activeObj = canvas.getActiveObject();
+    if (!activeObj) return;
+
+    dispatch(removeIcon({ id: activeObj.id }));
+  }, [dispatch, canvas]);
 };
