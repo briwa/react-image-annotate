@@ -69,7 +69,6 @@ export const useCreateIcon = (icon) => {
     };
 
   // Trigger hook only once in order to avoid flickering on re-rendering.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, !!icon]);
 };
 
