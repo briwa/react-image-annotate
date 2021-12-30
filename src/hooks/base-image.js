@@ -51,5 +51,7 @@ export const useSetBaseImage = () => {
 
       dispatch(setBaseImageSize({ width: imgWidth, height: imgHeight }));
     }
-  }, [canvas, baseImage?.url, dispatch, canvasSize]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canvas, baseImage?.url, dispatch]);
 };

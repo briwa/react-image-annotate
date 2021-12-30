@@ -5,15 +5,18 @@ import { toggleSider, setSize } from '../store/slices/canvas';
 import { CanvasContext } from '../hooks';
 
 const useDispatchContentSize = () => {
+  const { canvas } = useContext(CanvasContext);
   const dispatch = useDispatch();
 
-  return () => {
+  return useCallback(() => {
+    if (!canvas) return;
+
     const mainContent = document.getElementById('main-content');
     if (mainContent) {
       const rect = mainContent.getBoundingClientRect();
       dispatch(setSize({ width: rect.width, height: rect.height }));
     }
-  };
+  }, [dispatch, canvas]);
 }
 
 export const useContentSize = () => {
