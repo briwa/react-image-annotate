@@ -3,7 +3,7 @@ import { fabric } from 'fabric';
 
 import { CanvasContext } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { setItemProps, setEditingTextItemId } from '../store/slices/canvas';
+import { setItemProps, setEditingTextItemId, removeItem } from '../store/slices/canvas';
 
 export const useCreateText = (text) => {
   const { canvas } = useContext(CanvasContext);
@@ -52,12 +52,20 @@ export const useCreateText = (text) => {
     });
 
     currentText.on('editing:exited', () => {
-      console.log(currentText);
       dispatch(setEditingTextItemId({ id: null }));
-      dispatch(setItemProps({
-        id,
-        props: { attributes: { text: currentText.text } },
-      }));
+
+      if (currentText.text.trim() === '') {
+        dispatch(removeItem({ id }));
+      } else {
+        dispatch(setItemProps({
+          id,
+          props: {
+            width: currentText.width,
+            height: currentText.height,
+            attributes: { text: currentText.text }
+          },
+        }));
+      }
     });
 
     return () => {

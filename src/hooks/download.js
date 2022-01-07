@@ -23,7 +23,7 @@ export const useDownloadImage = () => {
 };
 
 export const useDownloadCSV = () => {
-  const shapedIcons = useSelector((state) => {
+  const shapedItems = useSelector((state) => {
     return state.canvas.items.allIds.map((id) => {
       const item = state.canvas.items.byId[id];
 
@@ -41,16 +41,16 @@ export const useDownloadCSV = () => {
   });
 
   return useCallback(() => {
-    if (shapedIcons.length === 0) return;
+    if (shapedItems.length === 0) return;
 
     const headers = [['title', 'x', 'y', 'attributes']];
     const csvContent = 'data:text/csv;charset=utf-8,'
-      + headers.concat(shapedIcons).map((m) => m.join(',')).join('\n');
+      + headers.concat(shapedItems).map((m) => m.join(',')).join('\n');
 
     const link = document.createElement('a');
     link.setAttribute('download', 'data.csv');
     link.href = csvContent;
     link.click();
     link.remove();
-  }, [shapedIcons]);
+  }, [shapedItems]);
 };
