@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -7,22 +6,24 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link as RouterLink,
+  useMatch,
+  useResolvedPath,
+} from "react-router-dom";
 
 import { DRAWER_WIDTH } from './constants';
-import { useInitializeCanvas, useKeys, useContentSize, useToggleSider } from './hooks';
+import { useToggleSider } from './hooks';
 
-import BaseImageInput from './components/BaseImageInput';
-import FabricCanvas from './components/FabricCanvas';
-import WelcomeText from './components/WelcomeText';
-import Sider from './components/Sider';
+import EditorPage from './pages/Editor';
+import AboutPage from './pages/About';
 
-const CanvasContainer = styled(Box)({
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
+import packageJson from '../package.json';
+
+const BASE_URL = packageJson.homepage.split('/').pop();
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -42,68 +43,86 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const mdTheme = createTheme();
-
-function AppContent() {
-  const baseImage = useSelector((state) => state.canvas.baseImage);
-  const [isSiderOpened, triggerToggleSider] = useToggleSider();
-
-  useInitializeCanvas();
-  useKeys();
-  useContentSize();
+function CustomLink({ children, to, ...props }) {
+  let resolved = useResolvedPath(to);
+  let match = useMatch({ path: resolved.pathname, end: true });
 
   return (
-    <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={isSiderOpened}>
-          <Toolbar sx={{ pr: '24px' }} >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={triggerToggleSider}
-              sx={{
-                marginRight: '36px',
-                ...(isSiderOpened && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Welcome.
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Sider />
-        <Box
-          id="main-content" 
-          component="main"
-          sx={{
-            flexGrow: 1,
-            height: 'calc(100vh - 4rem)',
-            overflow: 'auto',
-            mt: 8,
-          }}
-        >
-          { !baseImage && <WelcomeText /> }
-          <CanvasContainer id="canvas-container">
-            <canvas id="canvas"></canvas>
-          </CanvasContainer>
-        </Box>
-      </Box>
-      <BaseImageInput />
-      <FabricCanvas />
-    </ThemeProvider>
+    <RouterLink
+      style={{ textDecoration: "none" }}
+      to={to}
+      {...props}
+    >
+      <Typography
+        variant="span"
+        sx={{
+          mr: 3,
+          color: 'white',
+          textDecoration: 'none',
+          borderBottom: match ? '2px solid white' : 'none',
+        }}
+      >
+        {children}
+      </Typography>
+    </RouterLink>
   );
 }
 
+const mdTheme = createTheme();
+
+const MainContent = () => {
+  const [isSiderOpened, triggerToggleSider] = useToggleSider();
+  const isAboutPage = useMatch('about');
+  const shouldHaveSider = !isAboutPage && isSiderOpened;
+  const toggleIcon = isAboutPage
+    ? null
+    : (
+      <IconButton
+        edge="start"
+        color="inherit"
+        aria-label="open drawer"
+        onClick={triggerToggleSider}
+        sx={{
+          marginRight: '36px',
+          ...(shouldHaveSider && { display: 'none' }),
+        }}
+      >
+        <MenuIcon />
+      </IconButton>
+    );
+
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position="absolute" open={shouldHaveSider}>
+        <Toolbar sx={{ pr: '24px' }} >
+          {toggleIcon}
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={{ flexGrow: 1 }}
+          >
+            <CustomLink to="">Home</CustomLink>
+            <CustomLink to="about">About</CustomLink>
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Routes>
+        <Route path="about" element={<AboutPage />}/>
+        <Route index element={<EditorPage />}/>
+      </Routes>
+    </Box>
+  );
+};
+
 export default function App() {
-  return <AppContent />;
+  return (
+    <ThemeProvider theme={mdTheme}>
+      <BrowserRouter basename={BASE_URL}>
+        <MainContent />
+      </BrowserRouter>
+  </ThemeProvider>
+  );
 }
