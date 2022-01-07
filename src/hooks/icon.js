@@ -2,16 +2,17 @@ import { useContext, useEffect } from 'react';
 import { fabric } from 'fabric';
 
 import { CanvasContext } from '../hooks';
-import { useDispatch } from 'react-redux';
-import { setIconProps } from '../store/slices/canvas';
+import { useDispatch, useSelector } from 'react-redux';
+import { setItemProps } from '../store/slices/canvas';
 
 export const useCreateIcon = (icon) => {
   const { canvas } = useContext(CanvasContext);
   const { url, width, height, id, scaleX, scaleY, x, y } = icon;
   const dispatch = useDispatch();
+  const baseImage = useSelector((state) => state.canvas.baseImage);
 
   useEffect(() => {
-    if (!canvas) return;
+    if (!canvas || !baseImage) return;
 
     fabric.loadSVGFromURL(url, (icons) => {
       const currentIcon = icons[0];
@@ -19,7 +20,7 @@ export const useCreateIcon = (icon) => {
       if (!width && !height && scaleX === 1 && scaleY === 1) {
         currentIcon.scaleToWidth(50);
 
-        dispatch(setIconProps({
+        dispatch(setItemProps({
           id,
           props: {
             scaleX: currentIcon.scaleX,
@@ -36,14 +37,21 @@ export const useCreateIcon = (icon) => {
           .set('scaleY', scaleY);
       }
 
-      currentIcon.set('id', id)
-        .set('left', x)
-        .set('top', y);
+      if (!x && !y) {
+        currentIcon
+          .set('left', baseImage.width / 2 - currentIcon.width / 2)
+          .set('top', baseImage.height / 2 - currentIcon.height / 2);
+      } else {
+        currentIcon
+          .set('left', x)
+          .set('top', y);
+      }
 
+      currentIcon.set('id', id);
       canvas.add(currentIcon).setActiveObject(currentIcon).renderAll();
 
       currentIcon.on('moved', () => {
-        dispatch(setIconProps({
+        dispatch(setItemProps({
           id,
           props: {
             x: currentIcon.left,
@@ -53,7 +61,7 @@ export const useCreateIcon = (icon) => {
       });
 
       currentIcon.on('scaled', () => {
-        dispatch(setIconProps({
+        dispatch(setItemProps({
           id,
           props: {
             scaleX: currentIcon.scaleX,
@@ -69,20 +77,20 @@ export const useCreateIcon = (icon) => {
     };
 
   // Trigger hook only once in order to avoid flickering on re-rendering.
-  }, [dispatch, !!icon]);
+  }, [dispatch, canvas, !!icon]);
 };
 
 export const useSetIconColorOnCanvas = (icon) => {
   const { canvas } = useContext(CanvasContext);
-  const { id, color } = icon;
+  const { id, attributes } = icon;
 
   useEffect(() => {
     if (!canvas) return;
 
     const object = canvas.getObjects().find((o) => o.id === id);
     if (object) {
-      object.set('fill', color);
+      object.set('fill', attributes.color);
       canvas.renderAll();
     }
-  }, [canvas, id, color]);
+  }, [canvas, id, attributes.color]);
 };

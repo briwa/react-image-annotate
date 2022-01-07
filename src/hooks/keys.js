@@ -1,14 +1,16 @@
 import { useLayoutEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useTriggerDeleteActiveItem } from '../hooks';
 
 export const useKeys = () => {
   const triggerDeleteActiveItem = useTriggerDeleteActiveItem();
+  const editingTextItemId = useSelector((state) => state.canvas.editingTextItemId);
 
   useLayoutEffect(() => {
-    document.addEventListener('keyup', (e) => {
+    const addShortcutKeys = (e) => {
       // These shortcuts should only work
       // when user is not currently typing into any input.
-      if (document.activeElement.tagName === 'INPUT') return;
+      if (document.activeElement.tagName === 'INPUT' || !!editingTextItemId) return;
 
       switch (e.key) {
         case 'Delete':
@@ -20,6 +22,12 @@ export const useKeys = () => {
           break;
         }
       }
-    });
-  }, [triggerDeleteActiveItem]);
+    };
+
+    document.addEventListener('keyup', addShortcutKeys);
+
+    return () => {
+      document.removeEventListener('keyup', addShortcutKeys);
+    };
+  }, [editingTextItemId, triggerDeleteActiveItem]);
 };

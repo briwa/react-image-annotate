@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 import SiderAddIcons from './SiderAddIcons';
+import SiderAddText from './SiderAddText';
 import SiderBaseImage from './SiderBaseImage';
 import SiderDownloads from './SiderDownloads';
 import SiderProperties from './SiderProperties';
@@ -61,6 +62,7 @@ const Sider = () => {
     <List>
       <SiderBaseImage />
       <SiderAddIcons />
+      <SiderAddText />
       <SiderDownloads />
     </List>
     <Divider />

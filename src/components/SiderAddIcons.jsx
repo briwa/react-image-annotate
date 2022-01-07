@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -14,7 +13,7 @@ import AccessibilitySvg from '../symbols/accessibility.svg';
 import FireSvg from '../symbols/fire.svg';
 import InfoSvg from '../symbols/info.svg';
 
-import { addIcon } from '../store/slices/canvas';
+import { addItem } from '../store/slices/canvas';
 import { createIcon } from '../helpers/items';
 
 const SiderAddIcons = () => {
@@ -36,7 +35,7 @@ const SiderAddIcons = () => {
     }
 
     dispatch(
-      addIcon(createIcon({
+      addItem(createIcon({
         url: e.currentTarget.firstElementChild.src,
         title: e.currentTarget.firstElementChild.alt,
       })),

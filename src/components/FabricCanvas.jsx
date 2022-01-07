@@ -2,22 +2,37 @@ import { useSetBaseImage, useSetCanvasToBaseImage } from '../hooks';
 import { useSelector } from 'react-redux';
 
 import FabricIcon from './FabricIcon';
+import FabricText from './FabricText';
 
 const FabricCanvas = () => {
   useSetBaseImage();
   useSetCanvasToBaseImage();
 
-  const iconIds = useSelector((state) => state.canvas.icons.allIds);
+  const { allIds, byId } = useSelector((state) => state.canvas.items);
 
-  const iconNodes = iconIds.map((iconId) => {
-    return (
-      <FabricIcon key={iconId} id={iconId} />
-    );
+  const itemNodes = allIds.map((itemId) => {
+    const item = byId[itemId];
+
+    switch (item.type) {
+      case 'icon': {
+        return (
+          <FabricIcon key={item.id} item={item} />
+        );
+      }
+      case 'text': {
+        return (
+          <FabricText key={item.id} item={item} />
+        );
+      }
+      default: {
+        return null;
+      }
+    }
   });
 
   return (
     <>
-      {iconNodes}
+      {itemNodes}
     </>
   );
 };

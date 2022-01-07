@@ -1,11 +1,8 @@
-import { useSelector } from 'react-redux';
 import { useCreateIcon, useSetIconColorOnCanvas } from '../hooks';
 
-const FabricIcon = ({ id }) => {
-  const icon = useSelector((state) => state.canvas.icons.byId[id]);
-
-  useCreateIcon(icon);
-  useSetIconColorOnCanvas(icon);
+const FabricIcon = ({ item }) => {
+  useCreateIcon(item);
+  useSetIconColorOnCanvas(item);
   
   return null;
 };

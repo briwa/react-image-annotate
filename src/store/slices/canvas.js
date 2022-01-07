@@ -1,37 +1,40 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+function recursivelySetProps (item, props) {
+  for (const key in props) {
+    if (typeof props[key] === 'object') {
+      recursivelySetProps(item[key], props[key]);
+    } else {
+      item[key] = props[key];
+    }
+  }
+}
+
 export const canvasSlice = createSlice({
   name: 'canvas',
   initialState: {
     size: { width: 0, height: 0, isSiderOpened: true },
     baseImage: null,
-    icons: {
+    items: {
       allIds: [],
       byId: {},
     },
     activeItemId: null,
+    editingTextItemId: null,
   },
   reducers: {
-    addIcon: (state, action) => {
-      state.icons.allIds.push(action.payload.id);
-      state.icons.byId[action.payload.id] = action.payload;
+    addItem: (state, action) => {
+      state.items.allIds.push(action.payload.id);
+      state.items.byId[action.payload.id] = action.payload;
     },
-    removeIcon: (state, action) => {
-      state.icons.allIds = state.icons.allIds.filter((id) => id !== action.payload.id);
-      delete state.icons.byId[action.payload.id]
+    removeItem: (state, action) => {
+      state.items.allIds = state.items.allIds.filter((id) => id !== action.payload.id);
+      delete state.items.byId[action.payload.id]
     },
-    setIconProp: (state, action) => {
-      const icon = state.icons.byId[action.payload.id];
-      if (icon) {
-        icon[action.payload.key] = action.payload.value;
-      }
-    },
-    setIconProps: (state, action) => {
-      const icon = state.icons.byId[action.payload.id];
-      if (icon) {
-        for (const key in action.payload.props) {
-          icon[key] = action.payload.props[key];
-        }
+    setItemProps: (state, action) => {
+      const item = state.items.byId[action.payload.id];
+      if (item) {
+        recursivelySetProps(item, action.payload.props);
       }
     },
     setBaseImage: (state, action) => {
@@ -51,6 +54,9 @@ export const canvasSlice = createSlice({
     setActiveItemId: (state, action) => {
       state.activeItemId = action.payload.id;
     },
+    setEditingTextItemId: (state, action) => {
+      state.editingTextItemId = action.payload.id;
+    },
     toggleSider: (state, action) => {
       state.size.isSiderOpened = action.payload.toggle;
     },
@@ -58,10 +64,10 @@ export const canvasSlice = createSlice({
 });
 
 export const {
-  addIcon,
-  removeIcon,
-  setIconProp,
-  setIconProps,
+  addItem,
+  removeItem,
+  setItemProps,
+  setEditingTextItemId,
   setBaseImage,
   unsetBaseImage,
   setSize,

@@ -24,15 +24,15 @@ export const useDownloadImage = () => {
 
 export const useDownloadCSV = () => {
   const shapedIcons = useSelector((state) => {
-    return state.canvas.icons.allIds.map((id) => {
-      const icon = state.canvas.icons.byId[id];
+    return state.canvas.items.allIds.map((id) => {
+      const item = state.canvas.items.byId[id];
 
-      if (icon) {
+      if (item) {
         return [
-          icon.title,
-          icon.x + (icon.width * icon.scaleX / 2),
-          icon.y + (icon.height * icon.scaleY / 2),
-          encodeURIComponent(icon.color),
+          item.title,
+          item.x + (item.width * item.scaleX / 2),
+          item.y + (item.height * item.scaleY / 2),
+          encodeURIComponent(JSON.stringify(item.attributes)),
         ];
       }
 
@@ -43,7 +43,7 @@ export const useDownloadCSV = () => {
   return useCallback(() => {
     if (shapedIcons.length === 0) return;
 
-    const headers = [['title', 'x', 'y', 'color']];
+    const headers = [['title', 'x', 'y', 'attributes']];
     const csvContent = 'data:text/csv;charset=utf-8,'
       + headers.concat(shapedIcons).map((m) => m.join(',')).join('\n');
 

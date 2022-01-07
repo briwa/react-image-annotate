@@ -5,3 +5,4 @@ export * from './viewport';
 export * from './active-item';
 export * from './download';
 export * from './icon';
+export * from './text';

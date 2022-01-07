@@ -1,7 +1,7 @@
 import { useContext, useEffect, useCallback } from 'react';
 import { CanvasContext } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeIcon, setActiveItemId, setIconProp } from '../store/slices/canvas';
+import { removeItem, setActiveItemId, setItemProps } from '../store/slices/canvas';
 
 export const useActiveItemColor = () => {
   const { canvas } = useContext(CanvasContext);
@@ -10,7 +10,7 @@ export const useActiveItemColor = () => {
   const activeItemColor = useSelector((state) => {
     if (!activeItemId) return;
 
-    return state.canvas.icons.byId[activeItemId]?.color;
+    return state.canvas.items.byId[activeItemId]?.attributes?.color;
   });
 
   useEffect(() => {
@@ -39,10 +39,9 @@ export const useActiveItemColor = () => {
   }, [dispatch, canvas]);
 
   const setActiveItemColor = useCallback((color) => {
-    dispatch(setIconProp({
+    dispatch(setItemProps({
       id: activeItemId,
-      key: 'color',
-      value: color,
+      props: { attributes: { color } },
     }));
   }, [dispatch, activeItemId]);
 
@@ -59,6 +58,6 @@ export const useTriggerDeleteActiveItem = () => {
     const activeObj = canvas.getActiveObject();
     if (!activeObj) return;
 
-    dispatch(removeIcon({ id: activeObj.id }));
+    dispatch(removeItem({ id: activeObj.id }));
   }, [dispatch, canvas]);
 };
