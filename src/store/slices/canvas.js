@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-function recursivelySetProps (item, props) {
+const recursivelySetProps = (item, props) => {
   for (const key in props) {
     if (typeof props[key] === 'object') {
       recursivelySetProps(item[key], props[key]);

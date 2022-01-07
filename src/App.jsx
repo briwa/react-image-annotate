@@ -10,16 +10,15 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Link as RouterLink,
   useMatch,
-  useResolvedPath,
-} from "react-router-dom";
+} from 'react-router-dom';
 
 import { DRAWER_WIDTH } from './constants';
 import { useToggleSider } from './hooks';
 
 import EditorPage from './pages/Editor';
 import AboutPage from './pages/About';
+import CustomRouterLink from './components/CustomRouterLink';
 
 import packageJson from '../package.json';
 
@@ -42,31 +41,6 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
-
-function CustomLink({ children, to, ...props }) {
-  let resolved = useResolvedPath(to);
-  let match = useMatch({ path: resolved.pathname, end: true });
-
-  return (
-    <RouterLink
-      style={{ textDecoration: "none" }}
-      to={to}
-      {...props}
-    >
-      <Typography
-        variant="span"
-        sx={{
-          mr: 3,
-          color: 'white',
-          textDecoration: 'none',
-          borderBottom: match ? '2px solid white' : 'none',
-        }}
-      >
-        {children}
-      </Typography>
-    </RouterLink>
-  );
-}
 
 const mdTheme = createTheme();
 
@@ -104,8 +78,8 @@ const MainContent = () => {
             noWrap
             sx={{ flexGrow: 1 }}
           >
-            <CustomLink to="">Home</CustomLink>
-            <CustomLink to="about">About</CustomLink>
+            <CustomRouterLink to="">Home</CustomRouterLink>
+            <CustomRouterLink to="about">About</CustomRouterLink>
           </Typography>
         </Toolbar>
       </AppBar>
