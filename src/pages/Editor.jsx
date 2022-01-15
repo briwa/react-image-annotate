@@ -2,7 +2,13 @@ import { useSelector } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 
-import { useInitializeCanvas, useKeys, useContentSize } from '../hooks';
+import {
+  useInitializeCanvas,
+  useKeys,
+  useContentSize,
+  useActiveItem,
+  useItemModifications,
+} from '../hooks';
 
 import BaseImageInput from '../components/BaseImageInput';
 import FabricCanvas from '../components/FabricCanvas';
@@ -23,6 +29,8 @@ const EditorPage = () => {
   useInitializeCanvas();
   useKeys();
   useContentSize();
+  useActiveItem();
+  useItemModifications();
 
   return (
     <>

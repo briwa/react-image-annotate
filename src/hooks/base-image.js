@@ -44,7 +44,10 @@ export const useSetBaseImage = () => {
         img.scaleToWidth(canvasWidth);
       }
 
-      canvas.add(img).renderAll();
+      canvas
+        .add(img)
+        .sendToBack(img)
+        .renderAll();
 
       const imgWidth = img.width * img.scaleX;
       const imgHeight = img.height * img.scaleY;

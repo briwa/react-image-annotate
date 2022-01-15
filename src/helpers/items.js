@@ -27,6 +27,7 @@ export const createIcon = (props) => {
     height: 0,
     scaleX: 1,
     scaleY: 1,
+    angle: 0,
     attributes: { color: '#000000' },
     ...props,
   };
@@ -44,6 +45,7 @@ export const createText = (props) => {
     height: 0,
     scaleX: 1,
     scaleY: 1,
+    angle: 0,
     attributes: { text: 'Double click to edit', color: '#000000' },
     ...props,
   };

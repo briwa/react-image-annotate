@@ -1,78 +1,27 @@
 import { useContext, useEffect } from 'react';
 import { fabric } from 'fabric';
 
-import { CanvasContext } from '../hooks';
+import { CanvasContext, useSetInitialItemProps } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { setItemProps } from '../store/slices/canvas';
 
 export const useCreateIcon = (icon) => {
   const { canvas } = useContext(CanvasContext);
-  const { url, width, height, id, scaleX, scaleY, x, y } = icon;
   const dispatch = useDispatch();
   const baseImage = useSelector((state) => state.canvas.baseImage);
+  const setInitialItemProps = useSetInitialItemProps();
 
   useEffect(() => {
     if (!canvas || !baseImage) return;
 
-    fabric.loadSVGFromURL(url, (icons) => {
-      const currentIcon = icons[0];
+    fabric.loadSVGFromURL(icon.url, (icons) => {
+      const fabricIcon = icons[0];
 
-      if (!width && !height && scaleX === 1 && scaleY === 1) {
-        currentIcon.scaleToWidth(50);
-
-        dispatch(setItemProps({
-          id,
-          props: {
-            scaleX: currentIcon.scaleX,
-            scaleY: currentIcon.scaleY,
-            width: currentIcon.width,
-            height: currentIcon.height,
-          }
-        }));
-      } else {
-        currentIcon
-          .set('width', width)
-          .set('height', height)
-          .set('scaleX', scaleX)
-          .set('scaleY', scaleY);
-      }
-
-      if (!x && !y) {
-        currentIcon
-          .set('left', baseImage.width / 2 - currentIcon.width / 2)
-          .set('top', baseImage.height / 2 - currentIcon.height / 2);
-      } else {
-        currentIcon
-          .set('left', x)
-          .set('top', y);
-      }
-
-      currentIcon.set('id', id);
-      canvas.add(currentIcon).setActiveObject(currentIcon).renderAll();
-
-      currentIcon.on('moved', () => {
-        dispatch(setItemProps({
-          id,
-          props: {
-            x: currentIcon.left,
-            y: currentIcon.top,
-          }
-        }));
-      });
-
-      currentIcon.on('scaled', () => {
-        dispatch(setItemProps({
-          id,
-          props: {
-            scaleX: currentIcon.scaleX,
-            scaleY: currentIcon.scaleY,
-          }
-        }));
-      });
+      setInitialItemProps(icon, fabricIcon, baseImage);
+      canvas.add(fabricIcon).setActiveObject(fabricIcon).renderAll();
     });
 
     return () => {
-      const deletedIcon = canvas.getObjects().find((o) => o.id === id);
+      const deletedIcon = canvas.getObjects().find((o) => o.id === icon.id);
       if (deletedIcon) canvas.remove(deletedIcon);
     };
 

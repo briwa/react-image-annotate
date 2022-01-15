@@ -19,5 +19,10 @@ export const useInitializeCanvas = () => {
   useLayoutEffect(() => {
     const canvas = new fabric.Canvas('canvas');
     setCanvas(canvas);
+
+    return () => {
+      canvas.dispose();
+      setCanvas(null);
+    };
   }, [setCanvas]);
 };
